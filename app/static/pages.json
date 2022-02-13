@@ -1,0 +1,10 @@
+{
+    "notloggedin": [
+        {"name": "Home", "url": "/"},
+        {"name": "Projects", "url": "/projects"}
+    ],
+    "loggedin": [
+        {"name": "Home", "url": "/"},
+        {"name": "Projects", "url": "/projects"}
+    ]
+}

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+        <title>Waldemar.tk</title>
+        <meta charset="UTF-8">
+        <meta name="description" content="A less-simple website. Made with the Flask framework, for it's creator.">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="{{ url_for('static',filename='javascript/func.js') }}"></script>
+        <link rel="stylesheet" type="text/css" charset="UTF-8" href="{{ url_for('static',filename='styles/style.css') }}">
+        <link rel="stylesheet" type="text/css" charset="UTF-8" href="{{ url_for('static',filename='styles/reset.css') }}">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        {% block head %}
+        {% endblock %}
+    </head>
+    <body>
+        <header>
+            <div class="topright">
+                <p>{% if not current_user.is_authenticated %} <a href="{{ url_for('auth.login') }}">Log in</a> | <a href="{{ url_for('auth.signup') }}">Register</a> {% endif %}{% if current_user.is_authenticated %} <a href="{{ url_for('main.profile') }}">Profile</a> | <a href="{{ url_for('auth.logout') }}">Log out</a> {% endif %}</p>
+            </div>
+            <div class="titlediv">
+                <h1 title="Waldemar.tk">Waldemar.tk</h1>
+            </div>
+            <nav class="nav">
+                <ul id="navlist"></ul>
+            </nav>
+            <script defer type="text/javascript" charset="UTF-8">
+                const navlist = parseJSONfromURL("{{ url_for('static',filename='pages.json') }}")
+                const loggedin = false
+    
+                list = document.getElementById("navlist")
+                if(loggedin == false) {
+                    for(let i = 0; i < navlist.notloggedin.length; i++) {
+                        tag = "<li><a href='" + navlist.notloggedin[i].url + "'>" + navlist.notloggedin[i].name + "</a></li>";
+                        list.innerHTML += tag
+                    }
+                }
+            </script>
+            <hr>
+        </header>
+        <main id="main">
+            {% block content %}
+            {% endblock %}
+        </main>
+        <hr>
+        <footer>
+            <div id="links">
+                <h2>Links</h2>
+                <div id="link">
+                    <a href="https://github.com/waldemarbjornstrom">
+                        <img id="icon" alt="Github Logo" src="{{ url_for('static',filename='img/gh32px.png') }}">
+                        <p>Github</p>
+                    </a>
+                </div>
+                <div id="link">
+                    <a href="https://waldemar.tk">
+                        <img id="icon" alt="Internet icon" src="{{ url_for('static',filename='img/language.png') }}">
+                        <p>Website</p>
+                    </a>
+                </div>
+            </div>
+        </footer>
+    </body>
+</html>

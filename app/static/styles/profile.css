@@ -1,0 +1,29 @@
+.bigcropper {
+    width: 20vw;
+    height: 20vw;
+    border-radius: 100%;
+    overflow: hidden;
+}
+
+.bigcropper .profilepic {
+    height: 100%;
+    object-fit: cover;
+}
+
+.profileabout {
+    width: 40vw;
+    height: 100%;
+    float: left;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profilemenu {
+    width: 40vw;
+    height: 100%;
+    float: right;
+    display: flex;
+    justify-content: center;
+}

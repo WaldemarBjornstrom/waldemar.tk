@@ -1,0 +1,289 @@
+/* Manually add google fonts, to reduce critical requests chin */
+/* cyrillic-ext */
+@font-face {
+    font-family: 'Ubuntu Mono';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/ubuntumono/v10/KFOjCneDtsqEr0keqCMhbCc3CsTKlA.woff2) format('woff2');
+    unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+  /* cyrillic */
+@font-face {
+    font-family: 'Ubuntu Mono';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/ubuntumono/v10/KFOjCneDtsqEr0keqCMhbCc-CsTKlA.woff2) format('woff2');
+    unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+  /* latin-ext */
+@font-face {
+    font-family: 'Ubuntu Mono';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/ubuntumono/v10/KFOjCneDtsqEr0keqCMhbCc0CsTKlA.woff2) format('woff2');
+    unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+  /* latin */
+@font-face {
+    font-family: 'Ubuntu Mono';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/ubuntumono/v10/KFOjCneDtsqEr0keqCMhbCc6CsQ.woff2) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+  /* cyrillic-ext */
+@font-face {
+    font-family: 'Ubuntu Mono';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/ubuntumono/v10/KFO-CneDtsqEr0keqCMhbC-BL9H4tY12eg.woff2) format('woff2');
+    unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+  /* cyrillic */
+@font-face {
+    font-family: 'Ubuntu Mono';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/ubuntumono/v10/KFO-CneDtsqEr0keqCMhbC-BL9HxtY12eg.woff2) format('woff2');
+    unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+  /* latin-ext */
+@font-face {
+    font-family: 'Ubuntu Mono';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/ubuntumono/v10/KFO-CneDtsqEr0keqCMhbC-BL9H7tY12eg.woff2) format('woff2');
+    unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  }
+  /* latin */
+@font-face {
+    font-family: 'Ubuntu Mono';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/ubuntumono/v10/KFO-CneDtsqEr0keqCMhbC-BL9H1tY0.woff2) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* End google fonts */
+
+hr {
+    border-style: inset;
+    border-width: 1px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 80vw;
+}
+
+body {
+    background-color: #28282B;
+    font-family: 'Ubuntu Mono', monospace;
+    color: #c9cacc;
+}
+
+h1 {
+    font-size: 3em;
+}
+
+h2 {
+    font-size: 1.5em;
+    margin-bottom: .5em;
+    text-align: center;
+}
+
+h3 {
+    font-size: 1.25em;
+    font-weight: bold;
+    margin-bottom: .5em;
+}
+
+a {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+.nounderline {
+    text-decoration: none;
+}
+
+a:hover {
+    cursor: pointer;
+}
+
+.nav a {
+    margin-left: 1em;
+    margin-right: 1em;
+}
+
+header {
+    overflow: auto;
+    position: sticky;
+    top: 0;
+    background-color: #28282B;
+    min-height: 20vh;
+    max-width: 99vw;
+}
+
+.topright {
+    position: absolute;
+    top: 0;
+    right: 10vw;
+    padding: .25em;
+}
+
+.titlediv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    margin: 1em;
+}
+
+.nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: normal;
+    padding-bottom: 1em;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+li {
+    display: inline;
+}
+
+main {
+    min-height: 59vh;
+    width: 80vw;
+    overflow: auto;
+    margin: auto;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+footer {
+    min-height: 20vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: underline;
+}
+
+#links {
+    align-items: center;
+    text-align: center;
+    overflow: hidden;
+    display: inline-block;
+    padding-top: .25em;
+}
+
+#links > #link {
+    float: left;
+    margin: 1em;
+    cursor: pointer;
+}
+
+#icon {
+    height: 5vh;
+    width: 5vh;
+    max-width: 32px;
+    max-height: 32px;
+}
+
+.formcontainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.form {
+    background-color: #1d1d1d;
+    padding: 1em;
+    box-shadow: 0 0 20px #fff;
+    width: 304px;
+}
+
+input {
+    width: 17em;
+    height: 1.5em;
+    background-color: #c9cacc;
+    color: black;
+    margin-top: .5em;
+    margin-bottom: .5em;
+    border-radius: .15em;
+    padding: 0.2em;
+}
+
+input[type="text"], input[type="password"] {
+    cursor: text;
+}
+
+input[type="checkbox"] {
+    width: 1em;
+    height: 1em;
+    background-color: grey;
+    margin-left: 0;
+    border-radius: .25em;
+    cursor: pointer;
+}
+
+input[type="submit"] {
+    width: auto;
+    height: auto;
+    padding-top: 0.1em;
+    padding-bottom: 0.1em;
+    padding-left: 0.3em;
+    padding-right: 0.3em;
+    background-color: #c9cacc;
+    margin-left: 0;
+    border-radius: .25em;
+    cursor: pointer;
+}
+
+/* CSS Media crap */
+
+@media (max-width: 1000px) {
+    h1 {
+        font-size: 3em;
+    }
+}
+
+@keyframes Fade {
+    0% {opacity: 0;}
+    100% {visibility: visible; opacity: 1;}
+}
+
+@-webkit-keyframes Fade {
+    0% {opacity: 0;}
+    100% {visibility: visible; opacity: 1;}
+}
+
+@-moz-keyframes Fade {
+    0% {opacity: 0;}
+    100% {visibility: visible; opacity: 1;}
+}
+
+@-ms-keyframes Fade {
+    0% {opacity: 0;}
+    100% {visibility: visible; opacity: 1;}
+}
+
+@-o-keyframes Fade {
+    0% {opacity: 0;}
+    100% {visibility: visible; opacity: 1;}
+}

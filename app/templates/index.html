@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block head %}
+<link rel="stylesheet" type="text/css" charset="UTF-8" href="{{ url_for('static',filename='styles/mainpage.css') }}">
+{% endblock %}
+
+{% block content %}
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+    <div    >
+        {{ messages[0] }}
+    </div>
+{% endif %}
+{% endwith %}
+<div class="popup" id="browserPopup">
+    <img id="icon" title="Close" alt="Close" src="{{ url_for('static',filename='img/close.png') }}" onclick="hidePopup()">
+    <h1>Hey there!</h1>
+    <div id=browserPopupContent></div>
+</div>
+<script defer type="text/javascript" charset="UTF-8" src="{{ url_for('static',filename='javascript/popup.js') }}"></script>
+<h2>Hello! Thank you for visiting my site!</h2>
+            <p>
+                This has been a little project of mine, in lack of other things to do.
+                I'm sorry that this page maybe doesn't look as good as it could, But web 
+                development is not really my thing. But if you have any issues and/or ideas, 
+                feel free to create an issue on my github! That's right! Everything i do, is open source.
+                I know a bit of web dev and programming, but what i really do, if i can, is 
+                more in the direction of network and server management. Feel free to contact 
+                me if you want to, not that i know why you would, bit still. Do so if you want.
+                How? That's up tp you to find out.
+            </p>
+{% endblock %}

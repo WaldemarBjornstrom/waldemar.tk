@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Log in</h2>
+<br>
+<div class="formcontainer">
+    <form method="post" class="form">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div style="padding: .25em; margin-bottom: 1em; border-style: none none none solid; border-width: medium; border-color: red; background-color: rgba(255, 0, 0, 0.2);">
+                {{ messages[0] }}
+            </div>
+        {% endif %}
+        {% endwith %}
+        <label for="username">Username<span style="color: red;">*</span></label><br>
+        <input type="text" id="username" name="username" onkeyup="return forceLower(this);" required><br>
+        <label for="password">Password<span style="color: red;">*</span></label><br>
+        <input type="password" id="password" name="password" required><br>
+        <p style="font-size: 0.85em;"><span style="color: red;">*</span>Required fields</p>
+        <input id="rememberme" name="rememberme" type="checkbox">
+        <label for="checkbox">Remember me</label><br>
+        <input type="submit" value="Submit">
+    </form><br>
+    <p><a href="{{ url_for('auth.signup') }}">Register account</a> | <a href="{{ url_for('auth.forgot') }}">Forgot login?</a></p>
+</div>
+{% endblock %}

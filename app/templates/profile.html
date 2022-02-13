@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block head %}
+<link rel="stylesheet" type="text/css" charset="UTF-8" href="{{ url_for('static',filename='styles/profile.css') }}">
+{% endblock %}
+{% block content %}
+<div class="profile">
+    <div class="profileabout">
+        <div class="bigcropper"><img class="profilepic" src="{{ picurl }}"></div><br><br>
+        <h3>{{ current_user.name }}</h3>
+    </div>
+    <div class="profilemenu">
+        <ul>
+            <li><a href="{{ url_for('main.upload_profile_picture') }}"">Change profile picture</a></li>
+        </ul>
+    </div>
+</div>
+
+{% endblock %}
