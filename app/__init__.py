@@ -11,7 +11,7 @@ def create_app():
     UPLOAD_FOLDER = 'static/user-uploads/'
 
     app.config['SECRET_KEY'] = 'Super_Secret_Key_sshhhh!'
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db/db.sqlite'
     app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
     db.init_app(app)
