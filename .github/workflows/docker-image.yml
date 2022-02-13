@@ -31,5 +31,5 @@ jobs:
         with:
           context: .
           push: true
-          tags: latest
+          tags: unfwalle/waldemar.tk:latest
           labels: ${{ steps.meta.outputs.labels }}
