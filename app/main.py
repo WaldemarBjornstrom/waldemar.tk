@@ -16,6 +16,9 @@ main = Blueprint('main', __name__)
 
 @main.route('/')
 def index():
+    user = User.query.filter_by(username='admin').first()
+    if not user:
+        return redirect(url_for('auth.registeradmin'))
     return render_template('index.html')
 
 @main.route('/projects')
