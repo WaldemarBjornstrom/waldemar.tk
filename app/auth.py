@@ -99,7 +99,7 @@ def registeradmin_post():
         username = 'admin'
         name = 'Administrator'
         password = request.form.get('password')
-        new_user = User(username=username, name=name, password=generate_password_hash(password, method='sha256'), permission="Administrator")
+        new_user = User(username=username, name=name, password=generate_password_hash(password, method='sha256'), permission="Administrator", about="")
         db.session.add(new_user)
         db.session.commit()
         user = User.query.filter_by(username='admin').first()

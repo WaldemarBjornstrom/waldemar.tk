@@ -55,35 +55,26 @@ def otherprofile(user):
 def editprofile():
     user = User.query.filter_by(username=current_user.username).first()
     about = user.about
-    print('About text is: ' + about)
     return render_template('editprofile.html',  picurl=user.picurl, about=about)
 
 @login_required
 @main.route('/profile/settings', methods=['POST'])
 def upload_profile_picture_POST():
     if 'file' not in request.files:
-        print('No file. Updating about me text')
         about = request.form.get('about')
-        print('About text is: ' +  about)
         try: 
-            print('Testing ascii')
             about.encode('ascii')
         except UnicodeEncodeError:
-            print('text not ascii')
             flash('Text is not ascii')
             return url_for('main.editprofile')
 
         if len(about) >= 500:
-            print('text too long')
             flash('About text too long')
             return url_for('main.editprofile')
-        
-        print('finding user in db')
+
         user = User.query.filter_by(username=current_user.username).first()
-        print('user is: ' + str(user))
         user.about = escape(about)
         db.session.commit()
-        print('Commited changes to db')
 
         return redirect(url_for('main.profile'))
     
