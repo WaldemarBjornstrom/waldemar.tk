@@ -1,7 +1,6 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
-from .func import *
 
 # init SQLAlchemy so we can use it later in our models
 db = SQLAlchemy()
@@ -12,6 +11,7 @@ def create_app():
 
     app.config['SECRET_KEY'] = 'Super_Secret_Key_sshhhh!'
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db/db.sqlite'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
     db.init_app(app)
@@ -31,5 +31,8 @@ def create_app():
 
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)
+
+    from .admin import admin as admin_blueprint
+    app.register_blueprint(admin_blueprint)
 
     return app

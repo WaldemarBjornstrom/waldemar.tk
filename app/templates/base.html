@@ -36,11 +36,12 @@
                     }
                 }
             </script>
-            <hr>
+            <hr class="tophr">
         </header>
         <main id="main">
             {% block content %}
             {% endblock %}
+            {{ content|safe }}
         </main>
         <hr>
         <footer>

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block head %}
+<link rel="stylesheet" type="text/css" charset="UTF-8" href="{{ url_for('static',filename='styles/profile.css') }}">
+<script>
+    window.onload = function() {
+        displaycharcount()
+    }
+</script>
+{% endblock %}
+{% block content %}
+<div class="formcontainer">
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div style="padding: .25em; margin-bottom: 1em; border-style: none none none solid; border-width: medium; border-color: red; background-color: rgba(255, 0, 0, 0.2);">
+                {{ messages[0] }}
+            </div>
+        {% endif %}
+        {% endwith %}
+    <div class="mediumcropper"><img class="profilepic" src="{{ picurl }}"></div>
+    <form method="post" enctype="multipart/form-data">
+        <label for="file">New picture<span style="color: red;">*</span></label><br>
+        <input type="file" id="file" name="file" required><br>
+        <p style="font-size: 0.85em;"><span style="color: red;">*</span>Required fields</p>
+        <input type="submit" value="Upload">
+    </form>
+    <form method="post" id="aboutform">
+        <p>About:</p>
+        <textarea name="about" id="about" form="aboutform" rows="10" maxlength="499" onkeydown="displaycharcount()">{{ about }}</textarea><br>
+        <div id="the-count">
+            <span id="current">0</span>
+            <span id="maximum">/ 500</span>
+        </div><br>
+        <input type="submit" value="Change">
+    </form>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div style="padding: .25em; margin-bottom: 1em; border-style: none none none solid; border-width: medium; border-color: red; background-color: rgba(255, 0, 0, 0.2);">
+                {{ messages[0] }}
+            </div>
+        {% endif %}
+        {% endwith %}
+</div>
+
+{% endblock %}

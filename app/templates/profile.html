@@ -4,15 +4,22 @@
 <link rel="stylesheet" type="text/css" charset="UTF-8" href="{{ url_for('static',filename='styles/profile.css') }}">
 {% endblock %}
 {% block content %}
-<div class="profile">
-    <div class="profileabout">
-        <div class="bigcropper"><img class="profilepic" src="{{ picurl }}"></div><br><br>
-        <h3>{{ current_user.name }}</h3>
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+    <div    >
+        {{ messages[0] }}
     </div>
-    <div class="profilemenu">
-        <ul>
-            <li><a href="{{ url_for('main.upload_profile_picture') }}"">Change profile picture</a></li>
-        </ul>
+{% endif %}
+{% endwith %}
+<div class="profile">
+    <div class="leftfull">
+        <div class="bigcropper"><img class="profilepic" src="{{ picurl }}"></div><br><br>
+        <h3>{{ thisuser }}</h3>
+        {{ role|safe }}
+    </div>
+    <div class="rightfull">
+        <p style="white-space: pre-wrap;">{{ about }}</p>
+        {{ usermenu|safe }}
     </div>
 </div>
 

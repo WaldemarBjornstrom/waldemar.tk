@@ -130,3 +130,9 @@ dmypy.json
 
 # Database
 db.sqlite
+
+# Github Repo files
+README.md
+LICENSE
+.gitignore
+.github

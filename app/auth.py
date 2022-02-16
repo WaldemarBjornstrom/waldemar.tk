@@ -1,10 +1,17 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash, abort
-import flask_login
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import login_user, logout_user, login_required
+from flask_login import login_user, logout_user, login_required, current_user
 import json
 from .models import User
-from . import db, is_safe_url
+from . import db
+import shutil
+from urllib.parse import urlparse, urljoin
+
+def is_safe_url(target):
+    ref_url = urlparse(request.host_url)
+    test_url = urlparse(urljoin(request.host_url, target))
+    return test_url.scheme in ('http', 'https') and \
+           ref_url.netloc == test_url.netloc
 
 invalid_usernames = ['admin', 'user', 'administrator']
 
@@ -51,12 +58,17 @@ def signup_post():
         return redirect(url_for('auth.signup'))
 
     if username != "" and username not in invalid_usernames:
-        new_user = User(username=username, name=name, password=generate_password_hash(password, method='sha256'), permission="User")
+        new_user = User(username=username, name=name, password=generate_password_hash(password, method='sha256'), permission="User", about="")
     else:
         flash('Invalid username')
         return redirect(url_for('auth.signup'))
 
     db.session.add(new_user)
+    db.session.commit()
+
+    user = User.query.filter_by(username=username).first()
+    shutil.copyfile('app/static/user-uploads/default.jpg', 'app/static/user-uploads/' + str(user.id) + 'profilepic.png')
+    user.picurl = '/static/user-uploads/' + str(user.id) + 'profilepic.png'
     db.session.commit()
 
     return redirect(url_for('auth.login'))
@@ -70,3 +82,31 @@ def forgot():
 def logout():
     logout_user()
     return redirect(url_for('main.index'))
+
+@auth.route('/registeradmin')
+def registeradmin():
+    user = User.query.filter_by(username='admin').first()
+    if not user:
+        return render_template('configadmin.html')
+    else:
+        return "Admin user already configured"
+
+@auth.route('/registeradmin', methods=['POST'])
+def registeradmin_post():
+    user = User.query.filter_by(username='admin').first() 
+
+    if not user:
+        username = 'admin'
+        name = 'Administrator'
+        password = request.form.get('password')
+        new_user = User(username=username, name=name, password=generate_password_hash(password, method='sha256'), permission="Administrator")
+        db.session.add(new_user)
+        db.session.commit()
+        user = User.query.filter_by(username='admin').first()
+        shutil.copyfile('app/static/user-uploads/default.jpg', 'app/static/user-uploads/' + str(user.id) + 'profilepic.png')
+        user.picurl = '/static/user-uploads/' + str(user.id) + 'profilepic.png'
+        db.session.commit()
+        return redirect(url_for('auth.login'))
+    else: 
+        flash('Admin user already configured')
+        return redirect(url_for('auth.login'))

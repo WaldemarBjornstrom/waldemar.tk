@@ -5,25 +5,32 @@
     overflow: hidden;
 }
 
-.bigcropper .profilepic {
+.mediumcropper {
+    width: 15vw;
+    height: 15vw;
+    border-radius: 100%;
+    overflow: hidden;
+}
+
+.profilepic {
     height: 100%;
     object-fit: cover;
 }
 
-.profileabout {
-    width: 40vw;
-    height: 100%;
-    float: left;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
+.rightfull ul {
     align-items: center;
+    text-align: center;
 }
 
-.profilemenu {
-    width: 40vw;
-    height: 100%;
-    float: right;
-    display: flex;
-    justify-content: center;
+.rightfull ul li {
+    display: inline;
+}
+
+.lefftfull ul {
+    align-items: center;
+    text-align: center;
+}
+
+.leftfull ul li {
+    display: inline;
 }
