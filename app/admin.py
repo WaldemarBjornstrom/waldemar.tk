@@ -1,6 +1,6 @@
-from flask import Blueprint, render_template, flash, request, redirect, url_for, send_from_directory, abort
+from flask import Blueprint, get_flashed_messages, render_template, flash, request, redirect, url_for, send_from_directory, abort
 from werkzeug.utils import secure_filename
-from flask_login import login_required, current_user
+from flask_login import login_required, current_user, fresh_login_required
 from .models import User
 from . import db
 
@@ -42,7 +42,7 @@ def current():
     return render_template('current.html', header=header, data=data)
 
 @admin.route('/admin/permission')
-@login_required
+@fresh_login_required
 def changeuserpermission():
     if not amadmin(current_user.username):
         abort(403)
@@ -63,7 +63,7 @@ def changeuserpermission():
     return render_template('base.html', content=content)
 
 @admin.route('/admin/permission', methods=['POST'])
-@login_required
+@fresh_login_required
 def changeuserpermission_POST():
     if not amadmin(current_user.username):
         abort(403)
@@ -80,3 +80,50 @@ def changeuserpermission_POST():
         flash('User does not exist')
     
     return redirect(url_for('admin.changeuserpermission'))
+
+@admin.route('/admin/editdb')
+@fresh_login_required
+def editdb():
+    if not amadmin(current_user.username):
+        abort(403)
+    return render_template('editdb.html')
+
+@admin.route('/admin/editdb', methods=['POST'])
+@fresh_login_required
+def editdb_POST():
+    if not amadmin(current_user.username):
+        abort(403)
+    username = request.form.get('username')
+    column = request.form.get('column')
+    value = request.form.get('value')
+
+
+    user = User.query.filter_by(username=username).first()
+
+    if user:
+        if column == 'username':
+            oldvalue = str(user.username)
+            user.username = str(value)
+        elif column == 'password':
+            oldvalue = str(user.password)
+            user.password = str(value)
+        elif column == 'name':
+            oldvalue = str(user.name)
+            user.name = str(value)
+        elif column == 'permission':
+            oldvalue = str(user.permission)
+            user.permission = str(value)
+        elif column == 'about':
+            oldvalue = str(user.about)
+            user.about = str(value)
+        elif column == 'picurl':
+            oldvalue = str(user.picurl)
+            user.picurl = str(value)
+        else:
+            flash('choose a value to change')
+        db.session.commit()
+        flash('Successfully changed ' + column + ' for ' + user.username + ' from ' + oldvalue + ' to ' + value)
+    else:
+        flash('User does not exist')
+    
+    return redirect(url_for('admin.editdb'))

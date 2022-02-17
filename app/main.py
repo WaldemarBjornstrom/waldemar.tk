@@ -66,11 +66,11 @@ def upload_profile_picture_POST():
             about.encode('ascii')
         except UnicodeEncodeError:
             flash('Text is not ascii')
-            return url_for('main.editprofile')
+            return redirect(url_for('main.editprofile'))
 
         if len(about) >= 500:
             flash('About text too long')
-            return url_for('main.editprofile')
+            return redirect(url_for('main.editprofile'))
 
         user = User.query.filter_by(username=current_user.username).first()
         user.about = escape(about)
