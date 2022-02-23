@@ -1,5 +1,5 @@
-from flask import Blueprint, get_flashed_messages, render_template, flash, request, redirect, url_for, send_from_directory, abort
-from werkzeug.utils import secure_filename
+from flask import Blueprint, render_template, flash, request, redirect, url_for, abort
+from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_required, current_user, fresh_login_required
 from .models import User
 from . import db
@@ -11,6 +11,25 @@ def getusersinhtml():
         html = html + '<li><a href="/profile/' + user.username + '">' + str(user.username) + '</a></li><br>'
 
     return html + '</ul>'
+
+def getalldatabaseinhtml():
+    users = User.query.all()
+    html =  '''
+            <table>
+                <tr>
+                    <th>User ID</th>
+                    <th>Username</th>
+                    <th>Password</th>
+                    <th>Name</th>
+                    <th>Permission</th>
+                    <th>About</th>
+                    <th>Picture URL</th>
+                </tr>
+            '''
+    for user in users:
+        html = html + '<tr><td>' + str(user.id) + '</td>' + '<td>' + str(user.username) + '</td>' + '<td>' + str(user.password) + '</td>' + '<td>' + str(user.name) + '</td>' + '<td>' + str(user.permission) + '</td>' + '<td>' + str(user.about) + '</td>' + '<td>' + str(user.picurl) + '</td></tr>'
+    html = html + '</table>'
+    return html
 
 def amadmin(username):
     user = User.query.filter_by(username=username).first()
@@ -35,6 +54,9 @@ def current():
     if view == 'users':
         header = 'Current users:'
         data = getusersinhtml()
+    elif view == 'db':
+        header = 'Database'
+        data = getalldatabaseinhtml()
     elif view == 'none':
         header = 'No view selected'
         data = ''
@@ -93,6 +115,12 @@ def editdb():
 def editdb_POST():
     if not amadmin(current_user.username):
         abort(403)
+
+    adminpassword = request.form.get('password')
+    user = User.query.filter_by(username='admin').first()
+    if not check_password_hash(user.password, adminpassword):
+        flash('Invalid admin password')
+        return redirect(url_for('admin.editdb'))
     username = request.form.get('username')
     column = request.form.get('column')
     value = request.form.get('value')

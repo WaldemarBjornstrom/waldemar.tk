@@ -317,6 +317,27 @@ input[type="submit"] {
     float: right;
 }
 
+.leftfullnonflex {
+    width: 40vw;
+    height: 54vh;
+    float: left;
+}
+
+table {
+    display: table;
+    text-align: left; 
+    align-items: left;
+    table-layout: fixed;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+    overflow-wrap: break-word;
+    border: .15em solid #c9cacc;
+}
+
 /* CSS Media crap */
 
 @media (max-width: 1000px) {

@@ -26,7 +26,16 @@
     display: inline;
 }
 
-.lefftfull ul {
+.leftfullnonflex ul {
+    align-items: center;
+    text-align: center;
+}
+
+.leftfullnonflex ul li {
+    display: inline;
+}
+
+.leftfull ul {
     align-items: center;
     text-align: center;
 }
