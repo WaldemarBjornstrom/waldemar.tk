@@ -134,7 +134,7 @@ def editdb_POST():
             user.username = str(value)
         elif column == 'password':
             oldvalue = str(user.password)
-            user.password = str(value)
+            user.password = generate_password_hash(str(value), method='sha256')
         elif column == 'name':
             oldvalue = str(user.name)
             user.name = str(value)
