@@ -1,10 +1,13 @@
 from flask import Blueprint, render_template, flash, request, redirect, url_for, send_from_directory, escape, abort
 from werkzeug.utils import secure_filename
 from flask_login import login_required, current_user
+import string    
+import random
+
 
 from app.admin import current
 from . import db
-from .models import User
+from .models import User, API
 
 ALLOWED_EXTENSIONS = {'png', 'jpg'}
 
@@ -25,6 +28,10 @@ def index():
 def projects():
     return render_template('projects.html')
 
+@main.route('/projects/SE-Social')
+def render_sesocial():
+    return render_template('projects/SE-social.html')
+
 @main.route('/profile')
 @login_required
 def profile():
@@ -33,7 +40,7 @@ def profile():
     usermenu = '<ul>'
     if current_user.permission == 'Administrator':
         usermenu = usermenu + '<li><a href="' + url_for('admin.admin_page') + '">Admin area</a></li><br>'
-    usermenu = usermenu + '<li><a href="' + url_for('main.editprofile') + '">Edit profile</a></li><br></ul>'
+    usermenu = usermenu + '<li><a href="' + url_for('main.editprofile') + '">Edit profile</a></li><br><li><a href="/profile/registerapi">Register free API key</a></li><br></ul>'
 
     role = '<h4>' + current_user.permission + '</h4>'
 
@@ -56,6 +63,28 @@ def editprofile():
     user = User.query.filter_by(username=current_user.username).first()
     about = user.about
     return render_template('editprofile.html',  picurl=user.picurl, about=about)
+
+@login_required
+@main.route('/profile/registerapi')
+def registerfreeapi():
+    apiuser = API.query.filter_by(owner=current_user.username).first()
+    if apiuser:
+        return render_template('registerapi.html', text="API key already registred", key=apiuser.key)
+    else:
+        S = 24   
+        newkey = ''.join(random.choices(string.ascii_letters + string.digits, k = S))
+        apiuser = API.query.filter_by(key=newkey).first()
+        if apiuser:
+            registerfreeapi()
+        if current_user.username == 'admin':
+            tier = "Paid"
+        else:
+            tier = "Free"
+        apiuser = API(key=newkey, owner=current_user.username, tier=tier, rate='{"hour": "00", "no.": "0"}')
+        db.session.add(apiuser)
+        db.session.commit()
+        return render_template('registerapi.html', text="API key registred", key=newkey)
+
 
 @login_required
 @main.route('/profile/settings', methods=['POST'])

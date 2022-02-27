@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block head %}
+<style>
+    .column {
+        float: left;
+        width: 50%;
+        text-align: center;
+    }
+
+    /* Clear floats after the columns */
+    .row:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+
+    form {
+        text-align: left;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<h2>SE-Social</h2>
+<div class="row">
+    <div class="column">
+        <h3>Verify</h3>
+        <br>
+        <div class="formcontainer">
+            <form method="POST" action="/api/sesocial" class="form">
+                <label for="number">Social security number<span style="color: red;">*</span></label><br>
+                <input type="text" name="action" value="verify" hidden>
+                <input type="text" name="banned1" value="8411194536" hidden>
+                <input type="text" name="banned2" value="196383922637" hidden>
+                <input type="text" name="banned3" value="0263728102" hidden>
+                <input type="text" name="banned4" value="0326478125" hidden>
+                <input type="text" name="banned5" value="5527930024" hidden>
+                <input type="text" name="number"><br>
+                <input type="submit" value="Verify">
+            </form>
+        </div>
+    </div>
+    <div class="column">
+        <h3>Generate</h3>
+        <br>
+        <div class="formcontainer">
+            <form method="POST" action="/api/sesocial" class="form">
+                <input type="text" name="action" value="generate" hidden>
+                <input type="text" name="banned1" value="196213282637" hidden>
+                <input type="text" name="banned2" value="196305282637" hidden>
+                <input type="text" name="banned3" value="200611221634" hidden>
+                <input type="text" name="banned4" value="0263728102" hidden>
+                <input type="text" name="banned5" value="5527650024" hidden>
+                <label for="age">Age<span style="color: red;">*</span></label>
+                <input type="number" value="-1" name="age"><br>
+                <p style="font-size: 75%;">-1 is random</p><br>
+                <label for="gender">Gender<span style="color: red;">*</span></label><br>
+                <select name="gender">
+                    <option value="random">Random</option>
+                    <option value="female">Female</option>
+                    <option value="male">Male</option>
+                </select><br>
+                <input type="submit" value="Generate">
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

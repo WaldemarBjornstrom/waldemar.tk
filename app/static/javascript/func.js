@@ -78,3 +78,13 @@ function displaycharcount() {
   
       
 };
+
+function validate(){
+  if ($("#password").val() === $("#password2").val()) {
+    return true;
+  }
+  else {
+    alert('Passwords do not match')
+    return false;
+  }
+}

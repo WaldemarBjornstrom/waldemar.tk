@@ -11,6 +11,7 @@
                 </div>
             {% endif %}
             {% endwith %}
+            <input type="text" name="edit" value="Userdb" hidden>
             <label for="password">Admin password:</label>
             <input type="password" name="password" id ="password"><br>
             <label for="username">Username:</label><br>
@@ -26,6 +27,28 @@
             <label for="value">Value:</label><br>
             <input type="text" name="value"><br>
             <input type="submit" value="Change">
-        </form>
+        </form><br><br>
+        <form class="form" method="post">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div style="padding: .25em; margin-bottom: 1em; border-style: none none none solid; border-width: medium; border-color: red; background-color: rgba(255, 0, 0, 0.2);">
+                    {{ messages[0] }}
+                </div>
+            {% endif %}
+            {% endwith %}
+            <input type="text" name="edit" value="APIdb" hidden>
+            <label for="password">Admin password:</label>
+            <input type="password" name="password" id ="password"><br>
+            <label for="username">API Key:</label><br>
+            <input type="text" id="key" name="key"><br>
+            <select id="column" name="column">
+                <option value="owner">Owner</option>
+                <option value="tier">Tier</option>
+                <option value="rate">Rate</option>
+            </select><br>
+            <label for="value">Value:</label><br>
+            <input type="text" name="value"><br>
+            <input type="submit" value="Change">
+        </form><br><br>
     </div>
 {% endblock %}

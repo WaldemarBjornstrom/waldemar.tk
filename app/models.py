@@ -9,3 +9,9 @@ class User(UserMixin, db.Model):
     permission = db.Column(db.String(20))
     about = db.Column(db.String(1000))
     picurl = db.Column(db.String(500))
+
+class API(db.Model):
+    key = db.Column(db.String(100), primary_key=True)
+    owner = db.Column(db.String(100))
+    tier = db.Column(db.String(100))
+    rate = db.Column(db.String(1000))

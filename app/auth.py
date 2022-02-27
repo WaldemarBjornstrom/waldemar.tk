@@ -50,11 +50,16 @@ def signup_post():
     username = request.form.get('username').lower()
     name = request.form.get('name')
     password = request.form.get('password')
+    password2 = request.form.get('password2')
 
     user = User.query.filter_by(username=username).first() 
 
     if user: 
         flash('User already exists')
+        return redirect(url_for('auth.signup'))
+
+    if password2 != password:
+        flash('Password do not match')
         return redirect(url_for('auth.signup'))
 
     if username != "" and username not in invalid_usernames:

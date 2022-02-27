@@ -7,6 +7,7 @@ db = SQLAlchemy()
 
 def create_app():
     app = Flask(__name__)
+    app.config["DEBUG"] = True
     UPLOAD_FOLDER = 'static/user-uploads/'
 
     app.config['SECRET_KEY'] = 'Super_Secret_Key_sshhhh!'
@@ -21,6 +22,7 @@ def create_app():
     login_manager.init_app(app)
 
     from .models import User
+    from .models import API
 
     @login_manager.user_loader
     def load_user(user_id):
@@ -34,5 +36,8 @@ def create_app():
 
     from .admin import admin as admin_blueprint
     app.register_blueprint(admin_blueprint)
+
+    from .api import api as api_blueprint
+    app.register_blueprint(api_blueprint, url_prefix='/api')
 
     return app
