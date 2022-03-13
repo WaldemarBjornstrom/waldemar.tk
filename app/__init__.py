@@ -1,11 +1,14 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+import requests
 
 # init SQLAlchemy so we can use it later in our models
 db = SQLAlchemy()
 
 def create_app():
+    ip = requests.get('https://api64.ipify.org').text
+    print(str(ip))
     app = Flask(__name__)
     app.config["DEBUG"] = True
     UPLOAD_FOLDER = 'static/user-uploads/'

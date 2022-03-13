@@ -22,20 +22,11 @@
                 <h1 title="Waldemar.tk">Waldemar.tk</h1>
             </div>
             <nav class="nav">
-                <ul id="navlist"></ul>
+                <ul id="navlist">
+                    <li><a href='/'>Home</a></li>
+                    <li><a href='/projects'>Projects</a></li>
+                </ul>
             </nav>
-            <script defer type="text/javascript" charset="UTF-8">
-                const navlist = parseJSONfromURL("{{ url_for('static',filename='pages.json') }}")
-                const loggedin = false
-    
-                list = document.getElementById("navlist")
-                if(loggedin == false) {
-                    for(let i = 0; i < navlist.notloggedin.length; i++) {
-                        tag = "<li><a href='" + navlist.notloggedin[i].url + "'>" + navlist.notloggedin[i].name + "</a></li>";
-                        list.innerHTML += tag
-                    }
-                }
-            </script>
             <hr class="tophr">
         </header>
         <main id="main">

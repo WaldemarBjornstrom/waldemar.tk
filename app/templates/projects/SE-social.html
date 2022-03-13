@@ -18,6 +18,41 @@
         text-align: left;
     }
 </style>
+<script>
+    window.onload=function() {
+        const VerifyForm = document.getElementById('VerifyForm')
+        const GenerateForm = document.getElementById('GenerateForm')
+
+        VerifyForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const VerifyFormData = new FormData(this)
+            fetch('/api/sesocial', {
+                method: 'post',
+                body: VerifyFormData
+            }).then(function (response) {
+                console.log(response)
+                return response.json();
+            }).then(function(json) {
+                console.log(json);
+            }).catch(function (error) {
+                console.error(error);
+            })
+        });
+
+        GenerateForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const GenerateFormData = new FormData(this)
+            fetch('/api/sesocial', {
+                method: 'post',
+                body: VerifyFormData
+            }).then(function (response) {
+                console.log(respone.text())
+            }).catch(function (error) {
+                console.error(error);
+            })
+        });
+    }
+</script>
 {% endblock %}
 {% block content %}
 <h2>SE-Social</h2>
@@ -26,7 +61,7 @@
         <h3>Verify</h3>
         <br>
         <div class="formcontainer">
-            <form method="POST" action="/api/sesocial" class="form">
+            <form method="POST" action="/api/sesocial" class="form" id="VerifyForm">
                 <label for="number">Social security number<span style="color: red;">*</span></label><br>
                 <input type="text" name="action" value="verify" hidden>
                 <input type="text" name="banned1" value="8411194536" hidden>
@@ -43,7 +78,7 @@
         <h3>Generate</h3>
         <br>
         <div class="formcontainer">
-            <form method="POST" action="/api/sesocial" class="form">
+            <form method="POST" action="/api/sesocial" class="form" id="GenerateForm">
                 <input type="text" name="action" value="generate" hidden>
                 <input type="text" name="banned1" value="196213282637" hidden>
                 <input type="text" name="banned2" value="196305282637" hidden>

@@ -1,9 +1,12 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash, abort, jsonify
-import sesocial, datetime, json
+import sesocial, datetime, json, requests
+from sqlalchemy import false, true
 from .models import API
 from . import db
+from bs4 import BeautifulSoup
 
 api = Blueprint('api', __name__)
+prohibited_urls = ['None']
 
 def checkapikey(key):
     now = datetime.datetime.now().hour
@@ -38,13 +41,19 @@ def checkapikey(key):
     else:
         return False
 
+def isallowed(url):
+    for i in prohibited_urls:
+        if url == i:
+            return false
+    return true
+
 @api.route('/sesocial')
 def api_sesocial():
     action = str(request.args.get('action'))
     api_key = str(request.args.get('key'))
 
     if api_key == 'None':
-        return "Invalid request type: No api key"
+        return "Invalid request type: No API key"
 
     apikey = checkapikey(api_key)
     if apikey == 'Exceeded rate':
@@ -105,9 +114,9 @@ def api_sesocial():
 def api_sesocial_post():
     action = str(request.form.get('action'))
     api_key = str(request.form.get('key'))
-    if not request.environ['HTTP_ORIGIN'] == 'https://waldemar.tk/':
+    if not request.environ['HTTP_ORIGIN'] == 'https://waldemar.tk':
         if api_key == 'None':
-            return "Invalid request type: No api key"
+            return "Invalid request type: No API key"
     else:
         someinputs = [str(request.form.get('banned1')), str(request.form.get('banned2')), str(request.form.get('banned3')), str(request.form.get('banned4')), str(request.form.get('banned5'))]
         if someinputs[0] == '0326478125' or someinputs[1] == '196383922637' or someinputs[2] == '8411194536' or someinputs[3] == '0263728102' or someinputs[4] == '5527930024':
@@ -169,3 +178,35 @@ def api_sesocial_post():
         return str(number)
     else:
         return "No such action: " + action
+
+methods = ['GET', 'POST']
+
+@api.route('/proxy', methods=['POST', 'GET'])
+def proxy():
+    url = str(request.args.get('url'))
+    method = str(request.args.get('method'))
+    api_key = str(request.args.get('key'))
+
+    if api_key == 'None':
+        return "Invalid request type: No API key"
+
+    apikey = checkapikey(api_key)
+    if apikey == 'Exceeded rate':
+        return "API request rate exceeded"
+    elif apikey == False:
+        return "Invalid API key"
+
+    if method not in methods:
+        print(method)
+        return "Invalid method"
+
+    if isallowed(url) != true:
+        return "Prohibited URL"
+
+    if 'https://' not in url:
+        url = 'https://' + url
+
+    html = requests.get(url).content
+
+    soup = BeautifulSoup(html)
+    return str(soup)

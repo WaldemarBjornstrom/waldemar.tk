@@ -30,18 +30,6 @@ function checkCookie(cname) {
     }
 }
 
-function parseJSONfromURL(url) {
-  var request = new XMLHttpRequest();
-  request.open("GET", url, false);
-  request.send(null)
-  const prsdjson = JSON.parse(request.responseText);
-  return prsdjson
-}
-
-function forceLower(strInput) {
-strInput.value=strInput.value.toLowerCase();
-}
-
 function displaycharcount() {
     
   var characterCount = $('#about').val().length + 1,
