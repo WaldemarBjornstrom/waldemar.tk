@@ -26,7 +26,7 @@ def index():
 
 @main.route('/projects')
 def projects():
-    return render_template('projects.html')
+    return render_template('projects/index.html')
 
 @main.route('/projects/SE-Social')
 def render_sesocial():
