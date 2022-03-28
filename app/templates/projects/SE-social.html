@@ -34,8 +34,31 @@
                 return response.json();
             }).then(function(json) {
                 console.log(json);
+                if (document.getElementById('flash')) {document.getElementById('flash').remove()}
+                var element = document.createElement("div");
+                element.setAttribute('id','flash');
+                if (json.Valid) {
+                    element.appendChild(document.createTextNode('Valid'));
+                    element.style.cssText = 'padding: .25em; margin-bottom: 1em; border-style: none none none solid; border-width: medium; border-color: green; background-color: rgba(0, 255, 0, 0.2)'
+                }
+                else {
+                    element.appendChild(document.createTextNode('Invalid'));
+                    element.style.cssText = 'padding: .25em; margin-bottom: 1em; border-style: none none none solid; border-width: medium; border-color: red; background-color: rgba(255, 0, 0, 0.2)'
+                }
+                document.getElementById('VerifyForm').prepend(element);
+                setTimeout(function() {
+                    document.getElementById('flash').remove()
+                    console.log('Flash removed')
+                }, 2000);
             }).catch(function (error) {
                 console.error(error);
+                if (document.getElementById('flash')) {document.getElementById('flash').remove()}
+                var element = document.createElement("div");
+                element.setAttribute('id','flash');
+               
+                element.appendChild(document.createTextNode('Invalid input'));
+                element.style.cssText = 'padding: .25em; margin-bottom: 1em; border-style: none none none solid; border-width: medium; border-color: red; background-color: rgba(255, 0, 0, 0.2)'
+                document.getElementById('VerifyForm').prepend(element);
             })
         });
 
@@ -44,11 +67,32 @@
             const GenerateFormData = new FormData(this)
             fetch('/api/sesocial', {
                 method: 'post',
-                body: VerifyFormData
+                body: GenerateFormData
             }).then(function (response) {
-                console.log(respone.text())
+                console.log(response)
+                return response.json();
+            }).then(function(json) {
+                console.log(json);
+                if (document.getElementById('flash')) {document.getElementById('flash').remove()}
+                var element = document.createElement("div");
+                element.setAttribute('id','flash');
+                element.appendChild(document.createTextNode(json));
+                element.style.cssText = 'padding: .25em; margin-bottom: 1em; border-style: none none none solid; border-width: medium; border-color: green; background-color: rgba(0, 255, 0, 0.2)'
+                document.getElementById('GenerateForm').prepend(element);  
+                // Remove flash element after 2 seconds
+                setTimeout(function() {
+                    document.getElementById('flash').remove()
+                    console.log('Flash removed')
+                }, 2000);
             }).catch(function (error) {
                 console.error(error);
+                if (document.getElementById('flash')) {document.getElementById('flash').remove()}
+                var element = document.createElement("div");
+                element.setAttribute('id','flash');
+               
+                element.appendChild(document.createTextNode('Invalid input'));
+                element.style.cssText = 'padding: .25em; margin-bottom: 1em; border-style: none none none solid; border-width: medium; border-color: red; background-color: rgba(255, 0, 0, 0.2)'
+                document.getElementById('GenerateForm').prepend(element);
             })
         });
     }
@@ -60,7 +104,7 @@
     <div class="column">
         <h3>Verify</h3>
         <br>
-        <div class="formcontainer">
+        <div class="formcontainer" id="verify">
             <form method="POST" action="/api/sesocial" class="form" id="VerifyForm">
                 <label for="number">Social security number<span style="color: red;">*</span></label><br>
                 <input type="text" name="action" value="verify" hidden>
@@ -75,7 +119,7 @@
         </div>
     </div>
     <div class="column">
-        <h3>Generate</h3>
+        <h3>Generateee</h3>
         <br>
         <div class="formcontainer">
             <form method="POST" action="/api/sesocial" class="form" id="GenerateForm">
