@@ -12,10 +12,14 @@ def create_app():
     UPLOAD_FOLDER = 'static/user-uploads/'
 
     app.config['SECRET_KEY'] = 'Super_Secret_Key_sshhhh!'
-    if exists('localdev') or exists('docker'):
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db/db.sqlite'
-    else:
+    # Check if file ../prod is present, if so, use production config
+    # If not, then we are running in a development environment or in a docker container
+    if exists('../prod'):
         app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///home/pxadmin/db.sqlite'
+        print('Production Beta environment')
+    else:
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db/db.sqlite'
+        print('Local development environment')
     
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
