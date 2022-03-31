@@ -18,5 +18,5 @@ flask run
 ### Production server
 
 ```
-Waitress-serve -call "app:create_app"
+waitress-serve --call "app:create_app"
 ```
