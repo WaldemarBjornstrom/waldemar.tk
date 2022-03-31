@@ -49,7 +49,7 @@ try {
   if (d < 0.1) {
     console.log('Showing rick roll');
     navlist = document.getElementById('navlist');
-    navlist.innerHTML += "<li><a onclick='alert(" + '"' + 'you just got rick rolled!' + '"' + ")' href='http://127.0.0.1:5000/api/out?key=fjkdshfjjr374tgef7325rfg8wegr!g78ger3igbqwe¨fwjjeåsdf9dgbfdiuhsdfähdsövdsfhdsfgwtyeasydgu753y4u3gt438&url=https://youtu.be/dQw4w9WgXcQ'>View Database</a></li>"
+    navlist.innerHTML += "<li><a onclick='alert(" + '"' + 'you just got rick rolled!' + '"' + ")' href='/api/out?key=fjkdshfjjr374djw34h32y4gwegyu3rg4y33ewqyge3uy4gqwhry3u4gqiwuegy3ug5u4yqg32yu5g43uyergy4uygreyr34uy5g3wegyrug43yu5gyu3g4yug23yg4yu4g2y3gy4u3g2tgef7325rfg8wegr!g78ger3igbqwe¨fwjjeåsdf9dgbfdiuhsdfähdsövdsfhdsfgwtyeasydgu753y4u3gt438&url=https://youtu.be/dQw4w9WgXcQ'>View Database</a></li>"
   }
     // Check if cookie exists, if not, ask user for cookie consent
   if (checkCookie("consent") == false) {
