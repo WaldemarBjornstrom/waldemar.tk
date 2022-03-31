@@ -212,3 +212,10 @@ def proxy():
 
     soup = BeautifulSoup(html)
     return str(soup)
+
+@api.route('/out', methods=['GET'])
+def out():
+    url = str(request.args.get('url'))
+    with open('redirects.txt', 'a') as f:
+        f.write(url + ' ' + request.remote_addr +  '\n')
+    return '<!DOCTYPE HTML><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>' + url + '</title></head><body><script>window.location.href = "' + url + '";</script></body></html>'
