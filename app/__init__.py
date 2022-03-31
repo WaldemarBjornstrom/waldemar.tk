@@ -15,7 +15,7 @@ def create_app():
     # Check if file ../prod is present, if so, use production config
     # If not, then we are running in a development environment or in a docker container
     if exists('../prod'):
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///home/pxadmin/db.sqlite'
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/pxadmin/db.sqlite'
         print('Production Beta environment')
     else:
         app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db/db.sqlite'
