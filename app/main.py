@@ -119,6 +119,15 @@ def upload_profile_picture_POST():
     flash('File must be .png or .jpg')
     return url_for('main.editprofile')
 
-@main.route('/profile/<user>')
-def user(user):
-    return str(user)
+@main.route('/out', methods=['GET'])
+def out():
+    url = str(request.args.get('url'))
+    if url == 'https://youtu.be/dQw4w9WgXcQ' or url == 'https://www.youtube.com/watch?v=dQw4w9WgXcQ':
+        return redirect(url)
+    returnuri = str(request.args.get('return'))
+    disurl = (url[:75] + '...') if len(url) > 78 else url
+    if 'https://' in url:
+        https = True
+    else:
+        https = False
+    return render_template('out.html', url=url, disurl=disurl, returnuri=returnuri, https=https)

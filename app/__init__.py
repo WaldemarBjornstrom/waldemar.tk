@@ -1,28 +1,30 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
-from os.path import exists
+from flask_github import GitHub
+import os
+from dotenv import load_dotenv
 import requests
 
 # init SQLAlchemy so we can use it later in our models
 db = SQLAlchemy()
+# Load environment variables from .env file
+load_dotenv()
 
 def create_app():
+    global github
     app = Flask(__name__)
     UPLOAD_FOLDER = 'static/user-uploads/'
 
-    app.config['SECRET_KEY'] = 'Super_Secret_Key_sshhhh!'
-    # Check if file ../prod is present, if so, use production config
-    # If not, then we are running in a development environment or in a docker container
-    if exists('../prod'):
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/pxadmin/db.sqlite'
-        print('Production Beta environment')
-    else:
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db/db.sqlite'
-        print('Local development environment')
+    app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
+    
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
     
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+    app.config['GITHUB_CLIENT_ID'] = os.environ['GITHUB_CLIENT_ID']
+    app.config['GITHUB_CLIENT_SECRET'] = os.environ['GITHUB_CLIENT_SECRET']
+    github = GitHub(app)
 
     db.init_app(app)
 

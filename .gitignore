@@ -134,3 +134,6 @@ db.sqlite
 # Local dev files
 *profilepic.png
 redirects.txt
+
+# Environment config
+.env
