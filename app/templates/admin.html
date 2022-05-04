@@ -9,14 +9,12 @@
     <h2>Settings:</h2>
     <ul>
         <li><a href="{{ url_for('admin.changeuserpermission') }}">Change user permission</a></li><br>
-        <li><a href="{{ url_for('admin.editdb') }}">Edit database</a></li><br>
     </ul>
 </div>
 <div class="rightfull">
     <h2>Views:</h2>
     <ul>
         <li><a href="{{ url_for('admin.current') }}?view=users"">Current Users</a></li><br>
-        <li><a href="{{ url_for('admin.current') }}?view=db"">Database</a></li><br>
     </ul>
 </div>
 {% endblock %}
