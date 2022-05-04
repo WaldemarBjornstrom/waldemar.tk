@@ -31,10 +31,7 @@ if config['overwrite'] == True or config['action'] == 'reset':
     if os.path.exists(config['database']):
         os.remove(config['database'])
 
-if config['action'] == 'prepare':
-    if os.path.exists(config['database']):
-        raise InvalidArgumentError("Database already exists")
-else:
+if not config['action'] == 'prepare':
     if config['password'] != "":
         raise InvalidArgumentError("No password allowed for create or reset")
 
