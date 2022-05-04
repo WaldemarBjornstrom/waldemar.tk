@@ -2,9 +2,9 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [ beta ]
   pull_request:
-    branches: [ main ]
+    branches: [ beta ]
 
 jobs:
   push_to_registry:
@@ -31,5 +31,5 @@ jobs:
         with:
           context: .
           push: true
-          tags: unfwalle/waldemar.tk:latest
+          tags: unfwalle/waldemar.tk:beta
           labels: ${{ steps.meta.outputs.labels }}
