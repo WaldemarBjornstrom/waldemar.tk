@@ -6,7 +6,7 @@ Waldemar.tk beta website
 ## Install and build Manually
 
 Create a .env file containing:
-- `DATABSE_URL`: The URI to the database (default: sqlite:///db/db.sqlite)
+- `DATABASE_URL`: The URI to the database (default: sqlite:///db/db.sqlite)
 - `SECRET_KEY`: App secret key.
 - `GITHUB_CLIENT_ID`: Github client id
 - `GITHUB_CLIENT_SECRET`: Github client secret
@@ -29,12 +29,19 @@ flask run
 ```
 waitress-serve --call "app:create_app"
 ```
-## Install via docker
+## Install via docker (standalone)
 
 ```Docker
 docker pull unfwalle/waldemar.tk:beta
 docker volume create Database
 docker volume create UserData
-docker run -dp 8080:8080 --name Waldemar.tk -v Database:/webapp/app/db -v UserData:/webapp/app/static/user-uploads unfwalle/waldemar.tk:beta
+docker run \
+    -dp 8080:8080 \
+    --name Waldemar.tk \
+    -e GITHUB_CLIENT_ID=yourgithubclientid \
+    -e GITHUB_CLIENT_SECRET=yourgithubclientsecret \
+    -v Database:/webapp/app/db \
+    -v UserData:/webapp/app/static/user-uploads \
+    unfwalle/waldemar.tk:beta
 ```
 
