@@ -9,7 +9,8 @@ import requests
 # init SQLAlchemy so we can use it later in our models
 db = SQLAlchemy()
 # Load environment variables from .env file
-load_dotenv()
+if not os.environ['docker'] == 'true':
+    load_dotenv()
 
 def create_app():
     global github
