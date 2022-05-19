@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Redirect to {{ url }}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta charset="utf-8">
+        <style>
+            html {
+                height: 100%;
+            }
+            body {
+                min-height: 100%;
+                font-family: Arial, sans-serif;
+            }
+            a {
+                text-decoration: none;
+                color: #000;
+            }
+            .box {
+                display: block;
+                margin: 10px;
+                padding: 10px;
+                height: 100%;
+            }
+            .box75 {
+                width: 75%;
+            }
+            .box50 {
+                width: 50%;
+            }
+            .box-round {
+                border-radius: 10px;
+            }
+            .box-round-small {
+                border-radius: 5px;
+            }
+            .box-round-large {
+                border-radius: 20px;
+            }
+            .align-horizontally {
+                align-items: center;
+                text-align: center;
+            }
+            .align-all{
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 10px;
+            }
+            .full {
+                min-height: 92vh;
+            }
+            .btn {
+                border: none;
+                background-color: transparent;
+                color: black;
+                padding: 15px 32px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+                margin: 4px 2px;
+                cursor: pointer;
+            }
+            .btn-primary {
+                background-color: #4CAF50;
+                color: white;
+            }
+            .btn-secundary {
+                background-color: transparent;
+                border: 1px solid black;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="align-all full">
+            <div class="box box50 box-round align-horizontally" style="border: 1px solid black">
+                <h1>You are about to leave waldemar.tk</h1>
+                <p>We can't guarantee that the external site is safe.{% if https %} Although it does use https, whis is good practice. {% else %} But it <span style="color: red; font-weight: bold;">DOES NOT</span> use https, which is a bad sign. {% endif %}</p>
+                <p>The page that you will be redirected to is: <span style="font-style: italic;"><a href="{{ disurl }}">{{ disurl }}</a></span></p><br>
+                <a href="{{ returnuri }}" class="btn btn-primary">Go back</a>
+                <a href="{{ url }}" class="btn btn-secundary">Go to external site</a>
+            </div>
+        </div>
+    </body>
+</html>

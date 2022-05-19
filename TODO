@@ -1,0 +1,6 @@
+1. Fix the removing of the SE-social popup (Fix the 'generateeee' text)
+2. Consider updating packages in outdated.txt (Consider doing >= instead of ==)
+3. Add a cms.
+4. Add a dynamic page name that gets set by install. for example myowndomain.com.
+    4.1. Make sure the pubapi allows this origin.
+    4.2 Unless the page name is waldemar.tk or beta.waldemar.tk, remove the personal text

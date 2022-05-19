@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block head %}
-<link rel="stylesheet" type="text/css" charset="UTF-8" href="{{ url_for('static',filename='styles/mainpage.css') }}">
+<link rel="stylesheet" type="text/css" charset="UTF-8" href="{{ url_for('static',filename='styles/popup.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -13,20 +13,33 @@
 {% endif %}
 {% endwith %}
 <div class="popup" id="browserPopup">
-    <img id="icon" title="Close" alt="Close" src="{{ url_for('static',filename='img/close.png') }}" onclick="hidePopup()">
-    <h1>Hey there!</h1>
-    <div id=browserPopupContent></div>
+    <img id="icon" title="Close" alt="Close" src="{{ url_for('static',filename='img/close.png') }}" onclick="hideCookiePopup()">
+    <h1>Hey there!</h1><br>
+    <div id="cookiePopupContent">
+        <h2>We use cookies!</h2>
+        <div id="cookiePopupButtons">
+            <p>To make your experience on this site better, we store some cookies on your computer.</p><br>
+            <p>What cookies do you want us to store?</p><br>
+            <p>Absolutely necessary:</p><br>
+            <label class="switch">
+                <input type="checkbox" id="required" name="required" disabled checked>
+                <span class="slider round disabled" title="Can not be turned off."></span>
+            </label><br><br>
+            <p>Optional cookies:</p><br>
+            <label class="switch">
+                <input type="checkbox" id="optional" name="optional">
+                <span class="slider round"></span>
+            </label>
+        </div>
+        <button class="Confirm" onclick="confirmCookies()">Confirm</button>
+    </div>
 </div>
 <script defer type="text/javascript" charset="UTF-8" src="{{ url_for('static',filename='javascript/popup.js') }}"></script>
 <h2>Hello! Thank you for visiting my site!</h2>
             <p>
                 This has been a little project of mine, in lack of other things to do.
-                I'm sorry that this page maybe doesn't look as good as it could, But web 
-                development is not really my thing. But if you have any issues and/or ideas, 
-                feel free to create an issue on my github! That's right! Everything i do, is open source.
-                I know a bit of web dev and programming, but what i really do, if i can, is 
-                more in the direction of network and server management. Feel free to contact 
-                me if you want to, not that i know why you would, bit still. Do so if you want.
-                How? That's up tp you to find out.
+                My name is Waldemar, as you might se on the domain name. I do stuff like this sometimes, 
+                so feel free to check my other stuff out in the projects tab! Otherwise, feel free to check me  
+                out on <a href="https://twitter.com/WaldemarBjrnst3">Twitter</a> or <a href="https://github.com/WaldemarBjornstrom">Github</a>.
             </p>
 {% endblock %}

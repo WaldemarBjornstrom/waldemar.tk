@@ -136,3 +136,8 @@ README.md
 LICENSE
 .gitignore
 .github
+TODO
+outdated.txt
+
+# Local
+.env

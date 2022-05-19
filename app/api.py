@@ -109,12 +109,14 @@ def api_sesocial():
         return str(number)
     else:
         return "No such action: " + action
+
+allowed_origins = ['http://127.0.0.1:5000', 'https://waldemar.tk', 'https://beta.waldemar.tk']
         
 @api.route('/sesocial', methods=['POST'])
 def api_sesocial_post():
     action = str(request.form.get('action'))
     api_key = str(request.form.get('key'))
-    if not request.environ['HTTP_ORIGIN'] == 'https://waldemar.tk':
+    if not request.environ['HTTP_ORIGIN'] in allowed_origins:
         if api_key == 'None':
             return "Invalid request type: No API key"
     else:
@@ -122,7 +124,7 @@ def api_sesocial_post():
         if someinputs[0] == '0326478125' or someinputs[1] == '196383922637' or someinputs[2] == '8411194536' or someinputs[3] == '0263728102' or someinputs[4] == '5527930024':
             api_key = API.query.filter_by(owner='pubapi').first().key
         else:
-            return "Stop trying to reverse engineer my code!"
+            return "Stop trying to reverse engineer my code! Register for a free API Key instead!"
 
     apikey = checkapikey(api_key)
     if apikey == 'Exceeded rate':

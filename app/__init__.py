@@ -1,22 +1,31 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+from flask_github import GitHub
+import os
+from dotenv import load_dotenv
 import requests
 
 # init SQLAlchemy so we can use it later in our models
 db = SQLAlchemy()
+# Load environment variables from .env file
+if not os.environ.get('docker') == 'true':
+    load_dotenv()
 
 def create_app():
-    ip = requests.get('https://api64.ipify.org').text
-    print(str(ip))
+    global github
     app = Flask(__name__)
-    app.config["DEBUG"] = True
     UPLOAD_FOLDER = 'static/user-uploads/'
 
-    app.config['SECRET_KEY'] = 'Super_Secret_Key_sshhhh!'
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db/db.sqlite'
+    app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
+    
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+    
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+    app.config['GITHUB_CLIENT_ID'] = os.environ['GITHUB_CLIENT_ID']
+    app.config['GITHUB_CLIENT_SECRET'] = os.environ['GITHUB_CLIENT_SECRET']
+    github = GitHub(app)
 
     db.init_app(app)
 

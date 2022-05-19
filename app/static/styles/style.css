@@ -1,3 +1,5 @@
+/* Language: CSS */
+
 /* Manually add google fonts, to reduce critical requests chin */
 /* cyrillic-ext */
 @font-face {
@@ -112,6 +114,34 @@ a {
     text-decoration: underline;
 }
 
+.btn {
+    border: none;
+    background-color: black;
+    color: #ffffff;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.btn-github {
+    background-color: #2F3337;
+    color: #ffffff;
+    width: fit-content;
+    margin-bottom: 10px;
+}
+
+.btn-github:hover {
+    background-color: #232629;
+}
+
+.btn-github:active {
+    background-color: #0C0D0E;
+}
 .nounderline {
     text-decoration: none;
 }
@@ -207,8 +237,18 @@ footer {
 #icon {
     height: 5vh;
     width: 5vh;
-    max-width: 32px;
-    max-height: 32px;
+    height:32px;
+    object-fit: cover;
+}
+
+.svg-icon {
+    vertical-align: baseline; 
+    margin-top: -0.3em; 
+    margin-bottom: -0.3em;
+}
+
+.svg-github {
+    color: white;
 }
 
 .formcontainer {
