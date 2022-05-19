@@ -1,4 +1,4 @@
-# waldemar.tk beta
+# Waldemar.tk
 Waldemar.tk beta website
 
 #### All commads should be run from document root.
@@ -42,6 +42,6 @@ docker run \
     -e GITHUB_CLIENT_SECRET=yourgithubclientsecret \
     -v Database:/webapp/app/db \
     -v UserData:/webapp/app/static/user-uploads \
-    unfwalle/waldemar.tk:beta
+    unfwalle/waldemar.tk
 ```
 
