@@ -236,9 +236,7 @@ footer {
 
 #icon {
     height: 5vh;
-    width: 5vh;
-    height:32px;
-    object-fit: cover;
+    object-fit: scale-down;
 }
 
 .svg-icon {
