@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block head %}
+<link rel="stylesheet" type="text/css" charset="UTF-8" href="{{ url_for('static',filename='styles/profile.css') }}">
+<script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+<script>
+    totpstate = "{{ state }}";
+</script>
+{% endblock %}
+{% block content %}
+<div class="formcontainer">
+    <h2>Setup Two Factor Authentication (2FA)</h2>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div style="padding: .25em; margin-bottom: 1em; border-style: none none none solid; border-width: medium; border-color: red; background-color: rgba(255, 0, 0, 0.2);">
+                {{ messages[0] }}
+            </div>
+        {% endif %}
+        {% endwith %}
+        <div id="banner"></div>
+        <p>
+            <ul class="list">
+                <li>Download a TOTP-app on your smartphone, we recommend <a>Google Autheticator</a>.</li>
+                <li>Create a new account. Either choose to do so with qr-code or setup key.</li>
+                <li>Scan the QR-code or enter the key below.</li>
+            </ul><br>
+            <form id="form" method="POST" action="/2FA/activate">
+                <label for="key">Setup key:</label>
+                <input type="text" name="key" value="{{ secret }}" readonly><br>
+                <label for="otp">Code:</label>
+                <input type="text" name="otp" placeholder="Enter code here" required><br>
+                <input type="submit" id="submit" value="Activate 2FA">
+            </form>
+
+            <div id="qrcode"></div>
+            <script type="text/javascript" defer>
+                new QRCode(document.getElementById("qrcode"), "otpauth://totp/{{ current_user.username }}?secret={{ secret }}&issuer=Waldemar.tk");
+                if (totpstate == "True") {
+                    document.getElementById("banner").innerHTML = '<div style="padding: .25em; margin-bottom: 1em; border-style: none none none solid; border-width: medium; border-color: green; background-color: rgba(0, 255, 0, 0.2);">2FA is already enabled!</div>';
+                    document.getElementById("form").action = "/2FA/disable";
+                    document.getElementById("submit").value = "Disable 2FA";
+                }
+            </script>
+        </p>
+{% endblock %}

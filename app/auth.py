@@ -4,7 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, logout_user, login_required, current_user
 from flask_mail import Message
 from datetime import datetime
-import json, random, string, shutil
+import json, random, string, shutil, os, pyotp
 from .models import User, QueryUser
 from . import db, github, mail
 from urllib.parse import urlparse, urljoin
@@ -63,7 +63,8 @@ def password_check(passwd):
         return msg
           
 
-invalid_usernames = ['admin', 'user', 'administrator']
+invalid_usernames = json.loads(open('app/word.json').read())
+sender = ('Waldemar.tk', 'no-reply@waldemar.tk')
 
 auth = Blueprint('auth', __name__)
 
@@ -90,6 +91,26 @@ def login_post():
     if len(password) == 4 and password.isdigit():
         login_user(user, remember=remember)
         return redirect(url_for('auth.change_password', old=password))
+
+    if user.data2 != None:
+        userdict = json.loads(user.data2)
+    else: 
+        flash('Your account is not activated yet. Please check your email.')
+        return redirect(url_for('auth.login'))
+
+    if userdict['is_active'] == False:
+        flash('Your account is not active yet.')
+        return redirect(url_for('auth.login'))
+
+    if '2FA' in userdict and userdict['2FA']['enabled'] == True:
+        hashdict = {
+            'hash': str(generate_hash()),
+            'time': str(datetime.now()),
+            'action': '2FA'
+        }
+        user.data1 = json.dumps(hashdict)
+        db.session.commit()
+        return redirect(os.environ['URL'] + '/2FA/auth?id=' + str(user.id) + '&hash=' + hashdict['hash'])
 
     login_user(user, remember=remember)
     return redirect(next or url_for('main.index'))
@@ -136,9 +157,66 @@ def signup_post():
     user = User.query.filter_by(username=username).first()
     shutil.copyfile('app/static/user-uploads/default.jpg', 'app/static/user-uploads/' + str(user.id) + 'profilepic.png')
     user.picurl = '/static/user-uploads/' + str(user.id) + 'profilepic.png'
+    hash = generate_hash()
+    hashdict = {
+        'hash': hash,
+        'time': str(datetime.now()),
+        'action': 'activate'
+    }
+    user.data1 = json.dumps(hashdict)
     db.session.commit()
-    login_user(user)
-    return redirect(url_for('auth.profile'))
+
+    link = os.environ['URL'] + '/activate?id=' + str(user.id) + '&hs=' + hash
+
+    db.session.commit()
+    msg = Message('Account activation', recipients=[user.email], sender=sender)
+    msg.html = render_template('email/activate.html', name=user.name, link=link)
+    mail.send(msg)
+    flash('Please check your email to activate your account.')
+    return redirect(url_for('auth.login'))
+
+@auth.route('/activate')
+def activate():
+    id = request.args.get('id')
+    hash = request.args.get('hs')
+
+    user = User.query.filter_by(id=id).first()
+    if not user:
+        flash('Invalid link')
+        return redirect(url_for('auth.login'))
+
+    if user.data1 != None:
+        hashdict = json.loads(user.data1)
+    else:
+        flash('Your account is already activated.')
+        return redirect(url_for('auth.login'))
+
+    if hashdict['action'] != 'activate':
+        flash('Invalid link')
+        return redirect(url_for('auth.register'))
+
+    if hashdict['hash'] != hash:
+        flash('Invalid link')
+        return redirect(url_for('auth.register'))
+
+    then = datetime.strptime(hashdict['time'], "%Y-%m-%d %H:%M:%S.%f")
+    delta = datetime.now() - then
+    deltahours = delta.total_seconds() / 3600
+
+    if deltahours > 24:
+        db.session.delete(user)
+        flash('Link expired')
+        return redirect(url_for('auth.signup'))
+
+    userdict = {
+        'is_active': True
+    }
+
+    user.data2 = json.dumps(userdict)
+    user.data1 = None
+    db.session.commit()
+    flash('Account activated')
+    return redirect(url_for('auth.login'))
 
 @auth.route('/forgot')
 def forgot():
@@ -155,13 +233,13 @@ def forgot_post():
     
     hash = generate_hash()
     now = datetime.now()
-    hashdict = {'hash': hash, 'time': str(now)}
+    hashdict = {'hash': hash, 'time': str(now), 'action': 'reset'}
     user.data1 = json.dumps(hashdict)
     db.session.commit()
 
-    link = 'https://waldemar.tk/reset/?id=' + str(user.id) + '&hs=' + hash
+    link = os.environ['URL'] + '/reset?id=' + str(user.id) + '&hs=' + hash
 
-    msg = Message('Password Reset', sender=('Waldemar.tk', 'hello@waldemar.tk'), recipients=[user.email])
+    msg = Message('Password Reset', sender=sender, recipients=[user.email])
     msg.html = render_template('email/reset.html', link=link, username=user.username)
     mail.send(msg)
     flash('Check your email for the password reset link.')
@@ -178,6 +256,11 @@ def reset():
         return redirect(url_for('auth.login'))
 
     data = json.loads(user.data1)
+
+    if data['action'] != 'reset':
+        flash('Invalid link')
+        return redirect(url_for('auth.login'))
+    
     then = datetime.strptime(data['time'], "%Y-%m-%d %H:%M:%S.%f")
     delta = datetime.now() - then
     deltaminutes = delta.total_seconds() / 60
@@ -360,7 +443,7 @@ def unlink():
 def github_register_post(oauth_token):
     next_url = request.args.get('next') or url_for('main.index')
     if oauth_token is None:
-        flash('Github authorization failed.2')
+        flash('Github authorization failed.')
         return redirect(next_url)
 
     response = github.raw_request('GET', 'user', access_token=oauth_token)
@@ -433,6 +516,9 @@ def setupgithubregister_post():
         return redirect(url_for('auth.setupgithubregister'))
 
     if email:
+        if QueryUser.by_email(email):
+            flash('Email already exists')
+            return redirect(url_for('auth.setupgithubregister'))
         user.email = email
 
     user.password = generate_password_hash(user.salt + password, method='sha256')
@@ -453,4 +539,103 @@ def github_login():
 @auth.route('/github/register')
 def github_register():
     return github.authorize(scope="user", redirect_uri=url_for('auth.github_register_post', _external=True))
+
+@auth.route('/2FA/setup')
+@login_required
+def setup2fa():
+    user = User.query.filter_by(username=current_user.username).first()
+    userdict = json.loads(user.data2)
+    if '2FA' in userdict and userdict['2FA']['enabled'] == True:
+        state = userdict['2FA']['enabled']
+        return render_template('setup2fa.html', secret=userdict['2FA']['secret'], state=state)
+    secret = pyotp.random_base32()
+    if '2FA' in userdict and 'secret' in userdict['2FA']:
+        secret = userdict['2FA']['secret']
+    userdict['2FA'] = {'enabled': False, 'secret': secret}
+    user.data2 = json.dumps(userdict)
+    db.session.commit()
+    state = userdict['2FA']['enabled']
+    return render_template('setup2fa.html', secret=secret, state=state)
+
+@auth.route('/2FA/activate', methods=['POST'])
+@login_required
+def enable2fa():
+    otp = request.form.get('otp')
+    user = User.query.filter_by(username=current_user.username).first()
+    userdict = json.loads(user.data2)
+    secret = userdict['2FA']['secret']
+    if pyotp.TOTP(secret).verify(otp):
+        flash('2FA enabled')
+        userdict['2FA']['enabled'] = True
+        user.data2 = json.dumps(userdict)
+        db.session.commit()
+        return redirect(url_for('auth.setup2fa'))
+    else:
+        flash('Invalid OTP')
+        return redirect(url_for('auth.setup2fa'))
+
+@auth.route('/2FA/disable', methods=['POST'])
+@login_required
+def disable2fa():
+    otp = request.form.get('otp')
+    user = User.query.filter_by(username=current_user.username).first()
+    userdict = json.loads(user.data2)
+    secret = userdict['2FA']['secret']
+    if pyotp.TOTP(secret).verify(otp):
+        flash('2FA disabled')
+        userdict['2FA']['enabled'] = False
+        user.data2 = json.dumps(userdict)
+        db.session.commit()
+        return redirect(url_for('auth.setup2fa'))
+    else:
+        flash('Invalid OTP')
+        return redirect(url_for('auth.setup2fa'))
+
+@auth.route('/2FA/auth')
+def auth2fa():
+    hash = request.args.get('hash')
+    id = request.args.get('id')
+    if hash == None or id == None:
+        flash('Invalid request')
+        return redirect(url_for('auth.login'))
+    return render_template('auth2fa.html', hash=hash, id=id)
+
+@auth.route('/2FA/auth', methods=['POST'])
+def auth2fa_POST():
+    id = request.form.get('id')
+    hash = request.form.get('hash')
+    otp = request.form.get('otp')
+
+    print(id)
+    print(hash)
+    print(otp)
+
+    user = User.query.filter_by(id=id).first()
+
+    if not user:
+        flash('Invalid loginuser')
+        return redirect(url_for('auth.login'))
+
+    data = json.loads(user.data1)
+    then = datetime.strptime(data['time'], "%Y-%m-%d %H:%M:%S.%f")
+    delta = datetime.now() - then
+    deltaminutes = delta.total_seconds() / 60
+    if deltaminutes > 5:
+        flash('Login expired')
+        return redirect(url_for('auth.login'))
+
+    if data['hash'] != hash:
+        flash('Invalid loginhash')
+        return redirect(url_for('auth.login'))
+
+    userdict = json.loads(user.data2)
+    secret = userdict['2FA']['secret']
+    if pyotp.TOTP(secret).verify(otp):
+        user.data1 = ""
+        db.session.commit()
+        login_user(user)
+        return redirect(url_for('main.profile'))
+    else:
+        flash('Invalid OTP')
+        return redirect(url_for('auth.auth2fa', hash=hash, id=id))
 

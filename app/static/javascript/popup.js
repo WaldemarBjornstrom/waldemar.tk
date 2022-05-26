@@ -46,7 +46,7 @@ function confirmCookies() {
 try {
   var d = Math.random();
   console.log('Random numer is: ' + d);
-  if (d < 0.1) {
+  if (d < 0.05) {
     console.log('Showing rick roll');
     navlist = document.getElementById('navlist');
     navlist.innerHTML += "<li><a onclick='alert(" + '"' + 'you just got rick rolled!' + '"' + ")' href='/out?key=fjkdshfjjr374djw34h32&data=y4gwegyu3rg4y33ewqyge3uy4gqwhry3u4gqiwu&secret=egy3ug5u4yqg32yu5g43uyergy4uygreyr34uy5g3wegyrug43yu5gyu3g4yug23yg4yu4g2y3gy4u3g2tgef7325rfg8wegr!g78ger3igbqwe¨fwjjeåsdf9dgbfdiuhsdfähdsövdsfhdsfgwtyeasydgu753y4u3gt438&url=https://youtu.be/dQw4w9WgXcQ'>View Database</a></li>"

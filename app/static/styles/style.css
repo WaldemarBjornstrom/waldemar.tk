@@ -376,6 +376,22 @@ th, td {
     border: .15em solid #c9cacc;
 }
 
+.list {
+    display: block;
+    list-style-type: disc;
+    -webkit-margin-before: 1__qem;
+    -webkit-margin-after: 1em;
+    -webkit-margin-start: 0;
+    -webkit-margin-end: 0;
+    -webkit-padding-start: 40px
+
+}
+
+.list li {
+    display: list-item;
+    text-align: -webkit-match-parent;
+}
+
 /* CSS Media crap */
 
 @media (max-width: 1000px) {

@@ -85,7 +85,6 @@ def registerfreeapi():
         db.session.commit()
         return render_template('registerapi.html', text="API key registred", key=newkey)
 
-
 @login_required
 @main.route('/profile/settings', methods=['POST'])
 def upload_profile_picture_POST():
