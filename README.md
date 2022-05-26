@@ -10,6 +10,13 @@ Create a .env file containing:
 - `SECRET_KEY`: App secret key.
 - `GITHUB_CLIENT_ID`: Github client id
 - `GITHUB_CLIENT_SECRET`: Github client secret
+- `MAIL_SERVER`: SMTP mail server
+- `MAIL_PORT`: Mail port
+- `MAIL_USERNAME`: Mail username
+- `MAIL_DEFAULT_SENDER`: Mail adress from which mails should be sent
+- `MAIL_PASSWORD`: Password for mailing account
+- `MAIL_USE_TLS`: True if using starttls, else False
+- `MAIL_USE_SSL`: True if using ssl, else False
 
 Then run:
 ```
@@ -29,7 +36,7 @@ flask run
 ```
 waitress-serve --call "app:create_app"
 ```
-## Install via docker (standalone)
+## Install via docker (standalone) Older build
 
 ```Docker
 docker pull unfwalle/waldemar.tk:beta
