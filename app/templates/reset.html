@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Reset password</h2>
+<br>
+<div class="formcontainer">
+    <form method="post" class="form">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div style="padding: .25em; margin-bottom: 1em; border-style: none none none solid; border-width: medium; border-color: red; background-color: rgba(255, 0, 0, 0.2);">
+                {{ messages[0] }}
+            </div>
+        {% endif %}
+        {% endwith %}
+        <label for="password">Password<span style="color: red;">*</span></label><br>
+        <input type="password" id="password" name="password" required><br>
+        <label for="password2">Repeat password<span style="color: red;">*</label>
+        <input type="password" id="password2" name="password2" required><br>
+        <input type="number" id="id" name="id" value="{{ id }}" hidden>
+        <input type="text" id="hash" name="hash" value="{{ hash }}" hidden>
+        <p style="font-size: 0.85em;"><span style="color: red;">*</span>Required fields</p>
+        <input type="submit" value="Submit">
+    </form><br>
+</div>
+{% endblock %}

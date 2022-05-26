@@ -14,6 +14,7 @@ parser.add_argument('-d', '--database', default='app/db/db.sqlite', help='Databa
 parser.add_argument('-t', '--table', default='user', help='Table to edit')
 parser.add_argument('-D', '--docker', action='store_true', help='Set docker mode')
 parser.add_argument('-p', '--password', default='', help='Admin password')
+parser.add_argument('-e', '--email', default='', help='Admin email')
 parser.add_argument('action', choices=['useradd', 'userrm', 'edit', 'reset', 'create', 'prepare'], help='Database operation')
 parser.add_argument('username', nargs='*', default="none", help='Username(s) for useradd, userrm, edit')
 args = parser.parse_args()
@@ -43,7 +44,7 @@ if os.path.exists(config['database']):
 elif config['action'] == 'create' or config['action'] == 'reset' or config['overwrite'] == True:
     db = sqlite3.connect(config['database'])
     cursor = db.cursor()
-    cursor.execute("create table user (id integer primary key, username text, password text, salt text, github_oauth text, github_user_id integer, name text, permission text, about text, picurl text, data1 text, data2 text, int1 integer, int2 integer)")
+    cursor.execute("create table user (id integer primary key, username text, password text, email text, salt text, github_oauth text, github_user_id integer, name text, permission text, about text, picurl text, data1 text, data2 text, int1 integer, int2 integer)")
     cursor.execute("create table API (id integer primary key, key text, owner text, tier text, rate text)")
 else:
     raise DBerror("Database not found")
@@ -107,7 +108,7 @@ elif config['action'] == 'edit':
     if result == None:
         raise UserError("User does not exist")
     questions = [
-        inquirer.List('edit', message="Edit", choices=['id', 'username','password', 'salt', 'github_oauth', 'github_user_id', 'name', 'permission', 'about', 'picurl', 'data1', 'data2', 'int1', 'int2']),
+        inquirer.List('edit', message="Edit", choices=['id', 'username', 'email', 'password', 'salt', 'github_oauth', 'github_user_id', 'name', 'permission', 'about', 'picurl', 'data1', 'data2', 'int1', 'int2']),
     ]
     answers = inquirer.prompt(questions)
     if answers['edit'] == 'id':
@@ -115,6 +116,8 @@ elif config['action'] == 'edit':
         question = [inquirer.Text('data', message="new id")]
     elif answers['edit'] == 'username':
         question = [inquirer.Text('data', message="new username")]
+    elif answers['edit'] == 'email':
+        question = [inquirer.Text('data', message="new email")]
     elif answers['edit'] == 'password':
         question = [inquirer.Text('data', message="new password")]
     elif answers['edit'] == 'salt':
@@ -162,14 +165,16 @@ elif config['action'] == 'prepare':
     else:
         last_id = last_id[0]
     uid = last_id + 1
-    if config['password'] == "":
-        print('Asking for password')
+    if config['password'] == "" or config['email'] == "":
+        print('Asking for password  and email')
         questions = [
             inquirer.Text('password', message="Password"),
+            inquirer.Text('email', message="Email"),
         ]
         print('Username is: admin')
         answers = inquirer.prompt(questions)
         password = answers['password']
+        email = answers['email']
     else:
         print('password set')
         password = config['password']
@@ -178,7 +183,7 @@ elif config['action'] == 'prepare':
     salt = generate_salt()
     shutil.copyfile('app/static/user-uploads/default.jpg', 'app/static/user-uploads/' + str(uid) + 'profilepic.png')
     picurl = '/static/user-uploads/' + str(uid) + 'profilepic.png'
-    cursor.execute("INSERT INTO user (id, username, password, salt, name, permission, picurl) VALUES (?, ?, ?, ?, ?, ?, ?)", (uid, 'admin', generate_password_hash(salt + password, method='sha256'), salt, 'Administrator', 'Administrator', picurl))
+    cursor.execute("INSERT INTO user (id, username, password, email, salt, name, permission, picurl) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", (uid, 'admin', generate_password_hash(salt + password, method='sha256'), email, salt, 'Administrator', 'Administrator', picurl))
     last_id = last_id + 1
     uid = last_id + 1
     letters = string.ascii_letters + string.digits + string.punctuation

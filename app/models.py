@@ -4,6 +4,7 @@ from . import db
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True) # primary keys are required by SQLAlchemy
     username = db.Column(db.String(100), unique=True)
+    email = db.Column(db.String(100), unique=True)
     password = db.Column(db.String(100))
     salt = db.Column(db.String(500))
     github_oauth = db.Column(db.String(500))
@@ -22,3 +23,20 @@ class API(db.Model):
     owner = db.Column(db.String(100))
     tier = db.Column(db.String(100))
     rate = db.Column(db.String(1000))
+
+class QueryUser(object):
+    @staticmethod
+    def by_username(username):
+        return User.query.filter_by(username=username).first()
+
+    @staticmethod
+    def by_id(id):
+        return User.query.get(id)
+
+    @staticmethod
+    def by_email(email):
+        return User.query.filter_by(email=email).first()
+
+    @staticmethod
+    def by_username_or_email(username_or_email):
+        return User.query.filter(db.or_(User.username == username_or_email, User.email == username_or_email)).first()

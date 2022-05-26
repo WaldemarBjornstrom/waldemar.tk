@@ -2,6 +2,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_github import GitHub
+from flask_mail import Mail
 import os
 from dotenv import load_dotenv
 import requests
@@ -14,6 +15,7 @@ if not os.environ.get('docker') == 'true':
 
 def create_app():
     global github
+    global mail
     app = Flask(__name__)
     UPLOAD_FOLDER = 'static/user-uploads/'
 
@@ -25,8 +27,16 @@ def create_app():
     app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
     app.config['GITHUB_CLIENT_ID'] = os.environ['GITHUB_CLIENT_ID']
     app.config['GITHUB_CLIENT_SECRET'] = os.environ['GITHUB_CLIENT_SECRET']
-    github = GitHub(app)
+    app.config['MAIL_SERVER'] = os.environ['MAIL_SERVER']
+    app.config['MAIL_PORT'] = os.environ['MAIL_PORT']
+    app.config['MAIL_USERNAME'] = os.environ['MAIL_USERNAME']
+    app.config['MAIL_PASSWORD'] = os.environ['MAIL_PASSWORD']
+    app.config['MAIL_DEFAULT_SENDER'] = os.environ['MAIL_DEFAULT_SENDER']
+    app.config['MAIL_USE_TLS'] = True
+    app.config['MAIL_USE_SSL'] = False
 
+    github = GitHub(app)
+    mail = Mail(app)
     db.init_app(app)
 
     login_manager = LoginManager()
