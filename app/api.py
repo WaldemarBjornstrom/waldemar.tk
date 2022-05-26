@@ -3,7 +3,6 @@ import sesocial, datetime, json, requests
 from sqlalchemy import false, true
 from .models import API
 from . import db
-from bs4 import BeautifulSoup
 
 api = Blueprint('api', __name__)
 prohibited_urls = ['None']
@@ -210,5 +209,4 @@ def proxy():
 
     html = requests.get(url).content
 
-    soup = BeautifulSoup(html)
-    return str(soup)
+    return html
