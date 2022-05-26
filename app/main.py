@@ -40,7 +40,7 @@ def profile():
     usermenu = '<ul>'
     if current_user.permission == 'Administrator':
         usermenu = usermenu + '<li><a href="' + url_for('admin.admin_page') + '">Admin area</a></li><br>'
-    usermenu = usermenu + '<li><a href="' + url_for('main.editprofile') + '">Edit profile</a></li><br><li><a href="/profile/registerapi">Register free API key</a></li><br></ul>'
+    usermenu = usermenu + '<li><a href="' + url_for('main.editprofile') + '">Edit profile</a></li><br><li><a href="' + url_for('auth.change_password2') + '">Change password</a></li><br><li><a href="/profile/registerapi">Register free API key</a></li><br><li><a href="/profile/logout">Logout</a></li></ul>'
 
     role = '<h4>' + current_user.permission + '</h4>'
 
