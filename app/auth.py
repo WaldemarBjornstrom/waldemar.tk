@@ -25,6 +25,9 @@ def generate_hash():
     salt = ''.join(random.choice(letters) for i in range(25))
     return salt
 
+def generate_lotp():
+    return ''.join(random.choice(string.digits) for i in range(6))
+
 def password_check(passwd):
       
     SpecialSym =['!', '"', '#', '¤', '%', '/', '(', ')', '=', '?', '*', '+', '@', '£', '$', '€', '{', '}', '[', ']', '|', '\\', '^', '~', ';', ':', '<', '>', '.', ',']
@@ -606,10 +609,6 @@ def auth2fa_POST():
     hash = request.form.get('hash')
     otp = request.form.get('otp')
 
-    print(id)
-    print(hash)
-    print(otp)
-
     user = User.query.filter_by(id=id).first()
 
     if not user:
@@ -632,10 +631,53 @@ def auth2fa_POST():
     secret = userdict['2FA']['secret']
     if pyotp.TOTP(secret).verify(otp):
         user.data1 = ""
+        if 'lotp' in userdict['2FA']:
+            del userdict['2FA']['lotp']
+        user.data2 = json.dumps(userdict)
         db.session.commit()
         login_user(user)
         return redirect(url_for('main.profile'))
     else:
+        if 'lotp' in userdict['2FA']:
+            if otp == userdict['2FA']['lotp']:
+                del userdict['2FA']['lotp']
+                user.data2 = json.dumps(userdict)
+                db.session.commit()
+                login_user(user)
+                return redirect(url_for('main.profile'))
         flash('Invalid OTP')
         return redirect(url_for('auth.auth2fa', hash=hash, id=id))
 
+@auth.route('/2FA/sendmail', methods=['POST'])
+def sendmail():
+    id = request.form.get('id')
+    hash = request.form.get('hash')
+
+    user = User.query.filter_by(id=id).first()
+
+    if not user:
+        flash('Invalid login')
+        return redirect(url_for('auth.login'))
+
+    data = json.loads(user.data1)
+    then = datetime.strptime(data['time'], "%Y-%m-%d %H:%M:%S.%f")
+    delta = datetime.now() - then
+    deltaminutes = delta.total_seconds() / 60
+    if deltaminutes > 5:
+        flash('Login expired')
+        return redirect(url_for('auth.login'))
+
+    if data['hash'] != hash:
+        flash('Invalid login')
+        return redirect(url_for('auth.login'))
+
+    userdict = json.loads(user.data2)
+    secret = userdict['2FA']['secret']
+    otp = generate_lotp()
+    userdict['2FA']['lotp'] = otp
+    user.data2 = json.dumps(userdict)
+    db.session.commit()
+    msg = Message('2FA OTP', sender=sender, recipients=[user.email])
+    msg.html = render_template('email/otp.html', otp=otp)
+    mail.send(msg)
+    return '200'

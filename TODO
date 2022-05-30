@@ -1,3 +1,4 @@
+0. Activate github sso accounts.
 1. Add a cms.
 2. Add a dynamic page name that gets set by install. for example myowndomain.com.
     2.1. Make sure the pubapi allows this origin.

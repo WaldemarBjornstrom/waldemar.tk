@@ -1,10 +1,26 @@
 {% extends "base.html" %}
 
+{% block head %}
+<script>
+    function sendmail() {
+        form = document.getElementById("form")
+        formdata = new FormData(form);
+        fetch('/2FA/sendmail', {
+                method: 'post',
+                body: formdata
+            }).catch(function(error) {
+                console.log(error);
+            });
+
+    }
+</script>
+{% endblock %}
+
 {% block content %}
 <h2>Log in</h2>
 <br>
 <div class="formcontainer">
-    <form method="post" class="form">
+    <form method="post" class="form" id="form">
         {% with messages = get_flashed_messages() %}
         {% if messages %}
             <div style="padding: .25em; margin-bottom: 1em; border-style: none none none solid; border-width: medium; border-color: red; background-color: rgba(255, 0, 0, 0.2);">
@@ -18,6 +34,7 @@
         <input type="text" id="hash" name="hash" value="{{ hash }}" hidden>
         <p style="font-size: 0.85em;"><span style="color: red;">*</span>Required fields</p>
         <input type="submit" value="Submit">
+        <a class="btn" onclick="sendmail()">Send me an email instead</a>
     </form><br>
     <p style="padding-top: 10px;"><a href="{{ url_for('auth.signup') }}">Register account</a> | <a href="{{ url_for('auth.forgot') }}">Forgot login?</a></p>
 </div>

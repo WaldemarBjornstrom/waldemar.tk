@@ -166,7 +166,6 @@ elif config['action'] == 'prepare':
         last_id = last_id[0]
     uid = last_id + 1
     if config['password'] == "" or config['email'] == "":
-        print('Asking for password  and email')
         questions = [
             inquirer.Text('password', message="Password"),
             inquirer.Text('email', message="Email"),
@@ -179,11 +178,10 @@ elif config['action'] == 'prepare':
         print('password set')
         password = config['password']
 
-    print(password)
     salt = generate_salt()
     shutil.copyfile('app/static/user-uploads/default.jpg', 'app/static/user-uploads/' + str(uid) + 'profilepic.png')
     picurl = '/static/user-uploads/' + str(uid) + 'profilepic.png'
-    cursor.execute("INSERT INTO user (id, username, password, email, salt, name, permission, picurl) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", (uid, 'admin', generate_password_hash(salt + password, method='sha256'), email, salt, 'Administrator', 'Administrator', picurl))
+    cursor.execute("INSERT INTO user (id, username, password, email, salt, name, permission, picurl, data2) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", (uid, 'admin', generate_password_hash(salt + password, method='sha256'), email, salt, 'Administrator', 'Administrator', picurl, '{"is_active": true}'))
     last_id = last_id + 1
     uid = last_id + 1
     letters = string.ascii_letters + string.digits + string.punctuation
